@@ -1011,6 +1011,7 @@ mod tests {
                     tier1_model: None,
                     tier2_model: None,
                     tier3_model: None,
+                    tool_compact_enabled: false,
                 }),
                 agent_pinned_model: None,
                 is_coding_agent: true,
