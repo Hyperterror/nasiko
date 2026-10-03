@@ -1490,6 +1490,7 @@ mod tests {
             custom_endpoint: None,
             is_coding_agent: false,
             compress_enabled: false,
+            tool_compact_enabled: false,
         };
         let routed = RoutedRequest {
             agent_id: AGENT.into(),
@@ -1878,6 +1879,7 @@ mod tests {
                 custom_endpoint: None,
                 is_coding_agent: false,
                 compress_enabled: false,
+                tool_compact_enabled: false,
             },
             flow_id: None,
             attribution_source: None,
