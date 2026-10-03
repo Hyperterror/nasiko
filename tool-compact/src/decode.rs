@@ -107,7 +107,7 @@ pub(crate) fn extract_raw_calls(text: &str) -> Vec<(&str, &str)> {
         // Find tool name (up to the first space or {).
         let rest = &text[after_marker..];
         let name_end = rest
-            .find(|c: char| c == ' ' || c == '{')
+            .find([' ', '{'])
             .unwrap_or(rest.len());
         let tool_name = rest[..name_end].trim();
 
@@ -276,9 +276,9 @@ fn build_schema_map(tools: &[ToolDef]) -> HashMap<&str, InternalSchema> {
                 if let Some(vals) = prop_schema.get("enum").and_then(Value::as_array) {
                     let allowed: Vec<String> = vals
                         .iter()
-                        .filter_map(|v| match v {
-                            Value::String(s) => Some(s.clone()),
-                            other => Some(other.to_string()),
+                        .map(|v| match v {
+                            Value::String(s) => s.clone(),
+                            other => other.to_string(),
                         })
                         .collect();
                     if !allowed.is_empty() {

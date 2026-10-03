@@ -420,7 +420,7 @@ pub async fn resolve(
     let agent_pinned_model = agent_result.agent_pinned_model;
     let is_coding_agent = agent_result.is_coding_agent;
     let compress_enabled = agent_result.compress_enabled;
-    let tool_compact_enabled = llm_config.as_ref().map_or(false, |c| c.tool_compact_enabled);
+    let tool_compact_enabled = llm_config.as_ref().is_some_and(|c| c.tool_compact_enabled);
     let has_llm_config = llm_config.is_some();
     let secret_name = plan_secret_name(&llm_config);
 

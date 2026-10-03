@@ -195,10 +195,10 @@ fn should_bypass(schema: &Value, depth: usize) -> bool {
         }
     }
     // Recurse into array items.
-    if let Some(items) = obj.get("items") {
-        if should_bypass(items, depth + 1) {
-            return true;
-        }
+    if let Some(items) = obj.get("items")
+        && should_bypass(items, depth + 1)
+    {
+        return true;
     }
 
     false
@@ -210,9 +210,9 @@ fn infer_field_type(schema: &Value) -> FieldType {
     if let Some(values) = schema.get("enum").and_then(Value::as_array) {
         let vals: Vec<String> = values
             .iter()
-            .filter_map(|v| match v {
-                Value::String(s) => Some(s.clone()),
-                other => Some(other.to_string()),
+            .map(|v| match v {
+                Value::String(s) => s.clone(),
+                other => other.to_string(),
             })
             .collect();
         if !vals.is_empty() {
@@ -233,7 +233,7 @@ fn infer_field_type(schema: &Value) -> FieldType {
         "array" => {
             let item_type = schema
                 .get("items")
-                .map(|s| infer_field_type(s))
+                .map(infer_field_type)
                 .unwrap_or(FieldType::Unknown);
             FieldType::Array(Box::new(item_type))
         }

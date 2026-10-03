@@ -145,7 +145,7 @@ impl StreamDecoder {
         let after_marker = open_abs + CALL_OPEN.len();
 
         let rest = &buf[after_marker..];
-        let Some(name_end) = rest.find(|c: char| c == ' ' || c == '{') else {
+        let Some(name_end) = rest.find([' ', '{']) else {
             return CallExtraction::Incomplete;
         };
         let tool_name = rest[..name_end].trim();
@@ -312,9 +312,9 @@ fn build_validation_map(tools: &[ToolDef]) -> HashMap<&str, ValidationSchema> {
                 if let Some(vals) = prop_schema.get("enum").and_then(Value::as_array) {
                     let allowed: Vec<String> = vals
                         .iter()
-                        .filter_map(|v| match v {
-                            Value::String(s) => Some(s.clone()),
-                            other => Some(other.to_string()),
+                        .map(|v| match v {
+                            Value::String(s) => s.clone(),
+                            other => other.to_string(),
                         })
                         .collect();
                     if !allowed.is_empty() {
